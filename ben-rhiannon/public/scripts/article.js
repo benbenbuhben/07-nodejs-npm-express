@@ -1,6 +1,6 @@
 'use strict';
 
-function Article (rawDataObj) {
+function Article(rawDataObj) {
   this.author = rawDataObj.author;
   this.authorUrl = rawDataObj.authorUrl;
   this.title = rawDataObj.title;
@@ -11,10 +11,10 @@ function Article (rawDataObj) {
 
 Article.all = [];
 
-Article.prototype.toHtml = function() {
+Article.prototype.toHtml = function () {
   let template = Handlebars.compile($('#article-template').text());
 
-  this.daysAgo = parseInt((new Date() - new Date(this.publishedOn))/60/60/24/1000);
+  this.daysAgo = parseInt((new Date() - new Date(this.publishedOn)) / 60 / 60 / 24 / 1000);
   this.publishStatus = this.publishedOn ? `published ${this.daysAgo} days ago` : '(draft)';
   this.body = marked(this.body);
 
@@ -22,14 +22,13 @@ Article.prototype.toHtml = function() {
 };
 
 Article.loadAll = articleData => {
-  articleData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
+  articleData.sort((a, b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
 
-  articleData.forEach(articleObject => Article.all.push(new Article(articleObject)))
-}
+  articleData.forEach(articleObject => Article.all.push(new Article(articleObject)));
+};
 
 Article.fetchAll = () => {
   console.log('life');
-  //console.log(localStorage.rawData);
   if (localStorage.rawData) {
     Article.loadAll(JSON.parse(localStorage.rawData));
     articleView.initIndexPage();
@@ -43,23 +42,19 @@ Article.fetchAll = () => {
         console.error(err);
       });
   }
-}
+};
 
 // REVIEW: This new prototype method on the Article object constructor will allow us to create a new article from the new.html form page, and submit that data to the back-end. We will see this log out to the server in our terminal!
-Article.prototype.insertRecord = function(callback) {
+Article.prototype.insertRecord = function (callback) {
   console.log('life');
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
     .then(data => {
-      console.log(data);
       var arr = JSON.parse(localStorage.rawData);
-      console.log(arr);
       arr.push(data);
-      console.log(arr);
-      localStorage.rawData=JSON.stringify(arr);
-      //console.log(localStorage.rawData);
+      localStorage.rawData = JSON.stringify(arr);
 
       // COMMENT: What is the purpose of this line? Is the callback invoked when this method is called? Why or why not?
-      // PUT YOUR RESPONSE HERE
+      // The purpose of the callback is to be able to have cleaner code by inputting our above code as a function called 'callback' in our calling of article.insertRecord in the article.submit function. Therefore, when the user hits submit, the information is then being put through the logic of the submit function. When we call our insertRecord function, we are also calling the logic that we input into it after the beginning of the function has already ran.
       if (callback) callback();
     });
 };

@@ -3,7 +3,7 @@
 const articleView = {};
 
 articleView.populateFilters = () => {
-  $('article').each(function() {
+  $('article').each(function () {
     if (!$(this).hasClass('template')) {
       let val = $(this).find('address a').text();
       let optionTag = `<option value="${val}">${val}</option>`;
@@ -22,7 +22,7 @@ articleView.populateFilters = () => {
 };
 
 articleView.handleAuthorFilter = () => {
-  $('#author-filter').on('change', function() {
+  $('#author-filter').on('change', function () {
     if ($(this).val()) {
       $('article').hide();
       $(`article[data-author="${$(this).val()}"]`).fadeIn();
@@ -35,7 +35,7 @@ articleView.handleAuthorFilter = () => {
 };
 
 articleView.handleCategoryFilter = () => {
-  $('#category-filter').on('change', function() {
+  $('#category-filter').on('change', function () {
     if ($(this).val()) {
       $('article').hide();
       $(`article[data-category="${$(this).val()}"]`).fadeIn();
@@ -48,7 +48,7 @@ articleView.handleCategoryFilter = () => {
 };
 
 articleView.handleMainNav = () => {
-  $('.main-nav').on('click', '.tab', function(e) {
+  $('.main-nav').on('click', '.tab', function (e) {
     e.preventDefault();
     $('.tab-content').hide();
     $(`#${$(this).data('content')}`).fadeIn();
@@ -59,7 +59,7 @@ articleView.handleMainNav = () => {
 
 articleView.setTeasers = () => {
   $('.article-body *:nth-of-type(n+2)').hide();
-  $('article').on('click', 'a.read-on', function(e) {
+  $('article').on('click', 'a.read-on', function (e) {
     e.preventDefault();
     if ($(this).text() === 'Read on →') {
       $(this).parent().find('*').fadeIn();
@@ -67,7 +67,7 @@ articleView.setTeasers = () => {
     } else {
       $('body').animate({
         scrollTop: ($(this).parent().offset().top)
-      },200);
+      }, 200);
       $(this).html('Read on &rarr;');
       $(this).parent().find('.article-body *:nth-of-type(n+2)').hide();
     }
@@ -75,11 +75,11 @@ articleView.setTeasers = () => {
 };
 
 // COMMENT: When/where is this function invoked? What event ultimately triggers its execution? Explain the sequence of code execution when this function is invoked.
-// PUT YOUR RESPONSE HERE
+// this function is being invoked at the bottom of this js page to ensure that the logic is not fired until everything else is run through it. this function is fired first, then we are itterating through the array of articles from the provided data and appending them to the html. After that function has run, we call the populateFilters to make sure that our category and author dropdown menus has stuff interactable for the user to be able to actually filter (both category and author filters reference the filter function, hence it being there first). then the nav bar is being rendered to work. and finally the teaser text with user option to expand and contract is being called.
 articleView.initNewArticlePage = () => {
   $('.tab-content').show();
   $('#export-field').hide();
-  $('#article-json').on('focus', function(){
+  $('#article-json').on('focus', function () {
     this.select();
   });
 
@@ -88,7 +88,7 @@ articleView.initNewArticlePage = () => {
 };
 
 // COMMENT: When is this function called? What event ultimately triggers its execution?
-// PUT YOUR RESPONSE HERE
+// the initNemArticlePage hold a callback to this for the user's article to be constructed and then later rendered on the index.html page
 articleView.create = () => {
   let article;
   $('#articles').empty();
@@ -104,7 +104,7 @@ articleView.create = () => {
 
   $('#articles').append(article.toHtml());
 
-  $('pre code').each(function(i, block) {
+  $('pre code').each(function (i, block) {
     hljs.highlightBlock(block);
   });
 
@@ -113,7 +113,7 @@ articleView.create = () => {
 };
 
 // COMMENT: When is this function called? What event ultimately triggers its execution?
-// PUT YOUR RESPONSE HERE
+// the initNemArticlePage hold a callback to this for the user's article to be constructed and then later rendered on the index.html page. the submit is what really connects the user's input into the index.html page through local storage.
 articleView.submit = event => {
   event.preventDefault();
   let article = new Article({
@@ -131,7 +131,7 @@ articleView.submit = event => {
 };
 
 articleView.initIndexPage = () => {
-  Article.all.forEach(article =>{
+  Article.all.forEach(article => {
     $('#articles').append(article.toHtml());
   });
 
