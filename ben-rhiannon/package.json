@@ -1,0 +1,15 @@
+{
+  "name": "ben-rhiannon",
+  "version": "1.0.0",
+  "description": "Lab 07 NodeJS and NPM Express",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon server.js"
+  },
+  "author": "Ben and Rhiannon",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
